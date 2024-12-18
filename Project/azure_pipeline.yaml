@@ -42,6 +42,11 @@ jobs:
     - script: |
         pytest --html=./reports/report.html
       displayName: 'Run UI Selenium Tests'
+
+    # Step 6: Download Test Artifacts
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: reports
  
     # Step 6: Upload Test Results (Optional: If you want to visualize test results in Azure DevOps)
     # - task: PublishTestResults@2
