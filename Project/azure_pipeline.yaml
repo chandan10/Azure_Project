@@ -31,6 +31,7 @@ jobs:
     - script: |
         sudo apt-get update
         sudo apt-get install -y chromium-browser
+        sudo apt-get install -y libnss3 libgdk-pixbuf2.0-0 libxss1 libasound2
       displayName: 'Install Chromium Browser'
  
     # Step 4: Set the environment variable for headless browser testing
