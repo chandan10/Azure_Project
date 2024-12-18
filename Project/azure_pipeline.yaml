@@ -16,12 +16,12 @@ jobs:
         versionSpec: '3.10'
         addToPath: true
  
-    - checkout: self
-    
+    # - checkout: self
+
     # Step 2: Install dependencies
     - script: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r Project/requirements.txt
       displayName: 'Install dependencies'
  
     # Step 3: Set up WebDriver (Chromium)
