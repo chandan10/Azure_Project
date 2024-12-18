@@ -11,6 +11,9 @@ jobs:
   steps:
  
     # Step 1: Install Python
+    - script: |
+      echo "##vso[task.setvariable variable=LD_LIBRARY_PATH;]:/home/chandap10/myagent/az_work/_tool/Python/3.11.11/x64/lib"
+    displayName: Add the Python library path to the Linux native code library path
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.11.11'
