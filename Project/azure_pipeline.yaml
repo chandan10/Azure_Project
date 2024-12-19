@@ -11,36 +11,67 @@ jobs:
   steps:
  
     # Step 1: Install Python
-    - script: |
-        echo "##vso[task.setvariable variable=LD_LIBRARY_PATH;]:/home/chandap10/myagent/az_work/_tool/Python/3.11.11/x64/lib"
-      displayName: Add the Python library path to the Linux native code library path
+    # - script: |
+    #     echo "##vso[task.setvariable variable=LD_LIBRARY_PATH;]:/home/chandap10/myagent/az_work/_tool/Python/3.11.11/x64/lib"
+    #   displayName: Add the Python library path to the Linux native code library path
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '3.10'
+        versionSpec: '3.x'
         addToPath: true
  
     # - checkout: self
 
     # Step 2: Install dependencies
-    - script: |
-        python -m pip install --upgrade pip
-        pip install -r Project/requirements.txt
-      displayName: 'Install dependencies'
- 
+      - script: |
+          python -m pip install --upgrade pip
+          pip install -r Project/requirements.txt
+        displayName: 'Install dependencies'
+  
     # Step 3: Set up WebDriver (Chromium)
-    - script: |
-        sudo apt-get update
-        sudo apt-get install -y libxss1 libappindicator3-1 libindicator7 fonts-liberation libdbus-1-3 libgbm1 libvulkan1 xdg-utils
-        # sudo apt-get install -y chromium-browser
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i google-chrome-stable_current_amd64.deb
-        google-chrome-stable --version
-      displayName: 'Install Chromium Browser'
+      - script: |
+      echo "Installing Google Chrome..."
+
+      # Download the latest Chrome installer
+      Invoke-WebRequest -Uri "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "$(System.ArtifactsDirectory)\chrome_installer.exe"
+
+      # Run the installer to install Google Chrome (in silent mode)
+      Start-Process -FilePath "$(System.ArtifactsDirectory)\chrome_installer.exe" -ArgumentList "/silent", "/install" -Wait
+
+      # Verify the installation by checking the Chrome version
+      $chromeVersion = & "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
+      echo "Installed Chrome version: $chromeVersion"
+
+    displayName: 'Install Google Chrome'
+
+    # Step 3: Set up WebDriver (Chromium)
+    # - script: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y libxss1 libappindicator3-1 libindicator7 fonts-liberation libdbus-1-3 libgbm1 libvulkan1 xdg-utils
+    #     # sudo apt-get install -y chromium-browser
+    #     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    #     sudo dpkg -i google-chrome-stable_current_amd64.deb
+    #     google-chrome-stable --version
+    #   displayName: 'Install Chromium Browser'
+
+    # Step 3: Install Firefox and Geckodriver
+    # - script: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y firefox  # Install Firefox
+    #     sudo apt-get install -y wget     # Install wget to fetch Geckodriver
+    #     FIREFOX_VERSION=$(firefox --version | awk '{print $3}')
+    #     echo "Firefox version: $FIREFOX_VERSION"
+        
+    #     # Install Geckodriver for the installed Firefox version
+    #     wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz
+    #     tar -xvzf geckodriver-v0.30.0-linux64.tar.gz
+    #     sudo mv geckodriver /usr/local/bin/  # Move geckodriver to a directory in PATH
+    #     geckodriver --version  # Verify Geckodriver installation
+    #   displayName: 'Install Firefox and Geckodriver'
  
     # Step 4: Set the environment variable for headless browser testing
-    - script: |
-        export DISPLAY=:99
-      displayName: 'Set DISPLAY environment variable for headless testing'
+    # - script: |
+    #     export DISPLAY=:99
+    #   displayName: 'Set DISPLAY environment variable for headless testing'
  
     # Step 5: Run Selenium Tests using pytest
     - script: |
