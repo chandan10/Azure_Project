@@ -15,26 +15,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Project/requirements.txt
         displayName: Install dependencies
-      - script: >
-          echo "Installing Google Chrome..."
+      # - script: >
+      #     echo "Installing Google Chrome..."
 
 
-          # Download the latest Chrome installer
+      #     # Download the latest Chrome installer
 
-          Invoke-WebRequest -Uri "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "$(System.ArtifactsDirectory)\chrome_installer.exe"
-
-
-          # Run the installer to install Google Chrome (in silent mode)
-
-          Start-Process -FilePath "$(System.ArtifactsDirectory)\chrome_installer.exe" -ArgumentList "/silent", "/install" -Wait
+      #     Invoke-WebRequest -Uri "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "$(System.ArtifactsDirectory)\chrome_installer.exe"
 
 
-          # Verify the installation by checking the Chrome version
+      #     # Run the installer to install Google Chrome (in silent mode)
 
-          $chromeVersion = & "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
+      #     Start-Process -FilePath "$(System.ArtifactsDirectory)\chrome_installer.exe" -ArgumentList "/silent", "/install" -Wait
 
-          echo "Installed Chrome version: $chromeVersion"
-        displayName: Install Google Chrome
+
+      #     # Verify the installation by checking the Chrome version
+
+      #     $chromeVersion = & "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
+
+      #     echo "Installed Chrome version: $chromeVersion"
+      #   displayName: Install Google Chrome
       - script: |
           pytest --html=./reports/report.html
         displayName: Run UI Selenium Tests
