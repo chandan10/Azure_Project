@@ -51,6 +51,6 @@ jobs:
  
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: project/reports
+        pathToPublish: reports
         artifactName: 'drop'
         publishLocation: 'Container'
