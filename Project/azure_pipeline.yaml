@@ -1,44 +1,56 @@
----
 trigger:
-  - main
-pool:
+- main  # or the branch you want to trigger from
+ 
+pool: 
   name: Test1
+  # vmImage: 'ubuntu-latest'  # Select an Ubuntu VM for running tests
+ 
 jobs:
-  - job: RunSeleniumTests
-    displayName: Run Selenium Tests
-    steps:
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: 3.x
-          addToPath: true
-      - script: |
-          python -m pip install --upgrade pip
-          pip install -r Project/requirements.txt
-        displayName: Install dependencies
-      # - script: >
-      #     echo "Installing Google Chrome..."
+- job: RunSeleniumTests
+  displayName: 'Run Selenium Tests'
+  steps:
+ 
+    # Step 1: Install Python
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
 
+    # Step 2: Install dependencies
+    - script: |
+        python -m pip install --upgrade pip
+        pip install -r project/requirements.txt
+      displayName: 'Install dependencies'
+ 
+    # Step 3: Set up WebDriver (Chromium)
+    # - script: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y chromium-browser
+    #   displayName: 'Install Chromium Browser'
+ 
+    # Step 4: Set the environment variable for headless browser testing
+    # - script: |
+    #     export DISPLAY=:99
+    #   displayName: 'Set DISPLAY environment variable for headless testing'
+ 
+    # Step 3: Run Selenium Tests using pytest
+    - script: |
+        pytest --html=project/reports/report.html
+      displayName: 'Run UI Selenium Tests'
 
-      #     # Download the latest Chrome installer
-
-      #     Invoke-WebRequest -Uri "https://dl.google.com/chrome/install/latest/chrome_installer.exe" -OutFile "$(System.ArtifactsDirectory)\chrome_installer.exe"
-
-
-      #     # Run the installer to install Google Chrome (in silent mode)
-
-      #     Start-Process -FilePath "$(System.ArtifactsDirectory)\chrome_installer.exe" -ArgumentList "/silent", "/install" -Wait
-
-
-      #     # Verify the installation by checking the Chrome version
-
-      #     $chromeVersion = & "C:\Program Files\Google\Chrome\Application\chrome.exe" --version
-
-      #     echo "Installed Chrome version: $chromeVersion"
-      #   displayName: Install Google Chrome
-      - script: |
-          pytest --html=./reports/report.html
-        displayName: Run UI Selenium Tests
-      - task: DownloadPipelineArtifact@2
-        inputs:
-          artifact: reports
-          allowFailedBuilds: true
+    # Step 4: Download Test Artifacts
+    # - task: DownloadPipelineArtifact@2
+    #   inputs:
+    #     buildType: 'current'
+    # - task: DownloadPipelineArtifact@1
+    #   inputs:
+    #     buildType: 'current'
+    #     : 'single'
+    #     artifactName: 'my-artifact'
+    #     downloadPath: '$(Build.ArtifactStagingDirectory)'
+ 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: project/reports
+        artifactName: 'drop'
+        publishLocation: 'Container'
