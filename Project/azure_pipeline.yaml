@@ -13,7 +13,7 @@ jobs:
     # Step 1: Install Python
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '3.x'
+        versionSpec: '3.10'
         addToPath: true
 
     # Step 2: Install dependencies
@@ -23,10 +23,10 @@ jobs:
       displayName: 'Install dependencies'
  
     # Step 3: Set up WebDriver (Chromium)
-    # - script: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y chromium-browser
-    #   displayName: 'Install Chromium Browser'
+    - script: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+      displayName: 'Install Chromium Browser'
  
     # Step 4: Set the environment variable for headless browser testing
     # - script: |
@@ -39,9 +39,6 @@ jobs:
       displayName: 'Run UI Selenium Tests'
 
     # Step 4: Download Test Artifacts
-    # - task: DownloadPipelineArtifact@2
-    #   inputs:
-    #     buildType: 'current'
     # - task: DownloadPipelineArtifact@1
     #   inputs:
     #     buildType: 'current'
