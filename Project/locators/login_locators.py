@@ -1,6 +1,6 @@
 class LoginLocator:
     login_link = '//a[text()= "Login"]'
-    sign_up = '//*[@id="otp-login"]//div/a/span'
+    sign_up = '//*[@id="otp-login-btn"]'             #//div/a/span'
     email_input = '//div/input[@id="email"]'
     login_button = '//*[@id="otp-login-btn"]'
     login_with_password = '//div/a/span'
