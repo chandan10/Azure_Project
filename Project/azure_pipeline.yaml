@@ -51,3 +51,4 @@ jobs:
         pathToPublish: Project/reports
         artifactName: 'Automation_test_results'
         publishLocation: 'Container'
+        continueOnError: true
